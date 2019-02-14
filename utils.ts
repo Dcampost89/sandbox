@@ -16,7 +16,7 @@ const readSpreadsheetDataFromKey = (data: [string], key: string) => {
   let value = data.filter(row => {
     return row[0] === key;
   });
-  return value[0][1];
+  return value.length > 0 ? value[0][1] : null;
 };
 
 const setFormSubmitTrigger = (handlerFunction: string, formId: string) => {

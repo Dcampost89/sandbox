@@ -1,5 +1,5 @@
 import { readDataFromSpreadsheet, readSpreadsheetDataFromKey } from "./utils";
-import { FORM_TYPES, SHEETS, TITLES } from "./constants";
+import { FORM_TYPES, SHEETS, TITLES, SPREADSHEET_COLUMS } from "./constants";
 
 export class FormResponsesHandler {
   formId: string;
@@ -20,8 +20,9 @@ export class FormResponsesHandler {
 
     itemResponses.forEach(element => {
       Logger.log(
-        "question %s answer %s",
+        "question %s of type %s answer %s",
         element.getItem().getTitle(),
+        element.getItem().getType(),
         element.getResponse()
       );
     });
@@ -29,7 +30,7 @@ export class FormResponsesHandler {
     this.formResponsesFile = SpreadsheetApp.openById(form.getDestinationId());
     const responsesSheet = this.getResponsesSheet(itemResponses);
 
-    if (this.formType === FORM_TYPES.ENGINEER) {
+    if (this.formType == FORM_TYPES.ENGINEER) {
       const newRowToAppend = this.fetchEngineersFormResponses(itemResponses);
       responsesSheet.appendRow(newRowToAppend);
     } else {
@@ -38,18 +39,20 @@ export class FormResponsesHandler {
         responsesSheet.push(element);
       });
     }
+    this.setSumColumColorFormat(responsesSheet);
   }
 
   private fetchEngineersFormResponses(responses: any[]) {
     const row: any[] = [];
     let total: number = 0;
     responses.forEach(element => {
-      if (element.getItem().getType() !== "TEXT") {
-        const value = this.getResponseNumericValue(element.getResponse());
+      const resp: any = element.getResponse();
+      if (element.getItem().getType() == "MULTIPLE_CHOICE") {
+        const value = this.getResponseNumericValue(resp);
         row.push(value);
         total += value;
       } else {
-        row.push(element.getResponse());
+        row.push(resp);
       }
     });
     row.push(total);
@@ -64,11 +67,9 @@ export class FormResponsesHandler {
       let total: number = 0;
       responses.forEach(element => {
         let resp: any = element.getResponse();
-        const respType = element.getItem().getType();
-        if (respType === "GRID") {
+        const respType: string = element.getItem().getType();
+        if (respType == "GRID") {
           resp = resp[i];
-        }
-        if (respType !== "TEXT") {
           const value = this.getResponseNumericValue(resp);
           total += value;
           row.push(value);
@@ -82,13 +83,45 @@ export class FormResponsesHandler {
     return rows;
   }
 
+  private setSumColumColorFormat(sheet: any) {
+    const data = sheet.getDataRange().getValues();
+    const lastRow = data.length;
+    const lastColum = data[0].length - 1;
+    const letterRange = SPREADSHEET_COLUMS[lastColum] + lastRow;
+    const range = sheet.getRange(letterRange);
+
+    const greenRule = SpreadsheetApp.newConditionalFormatRule()
+      .whenNumberGreaterThanOrEqualTo(33)
+      .setBackground("#32CD32")
+      .setRanges([range])
+      .build();
+
+    const yellowRule = SpreadsheetApp.newConditionalFormatRule()
+      .whenNumberBetween(25, 32)
+      .setBackground("#FFFFE0")
+      .setRanges([range])
+      .build();
+
+    const redRule = SpreadsheetApp.newConditionalFormatRule()
+      .whenNumberLessThanOrEqualTo(24)
+      .setBackground("#F08080")
+      .setRanges([range])
+      .build();
+
+    const rules = sheet.getConditionalFormatRules();
+    rules.push(greenRule);
+    rules.push(yellowRule);
+    rules.push(redRule);
+    sheet.setConditionalFormatRules(rules);
+  }
+
   private getResponsesSheet(responses: any[]) {
     let sheet: any;
     sheet = this.formResponsesFile.getSheetByName(SHEETS.FORM_RESPONSES);
     if (!sheet) {
       sheet = this.formResponsesFile.insertSheet(SHEETS.FORM_RESPONSES);
       const row = [];
-      if (this.formType !== FORM_TYPES.ENGINEER) {
+      if (this.formType != FORM_TYPES.ENGINEER) {
         row.push(TITLES.EMAIL);
       }
       responses.forEach(element => {
