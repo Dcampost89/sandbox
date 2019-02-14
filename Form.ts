@@ -92,7 +92,7 @@ export class Form {
     } else {
       this.questions.forEach((question, index) => {
         if (index > 1) {
-          this.addTableField(question);
+          this.addTableField(question, title);
         } else {
           this.addMultipleChoiceField(question);
         }
@@ -166,9 +166,9 @@ export class Form {
     return question;
   }
 
-  private addTableField(title) {
+  private addTableField(title, project) {
     const question = this.form.addGridItem().setTitle(title);
-    const engineers = this.fetchEngineersByProject(title);
+    const engineers = this.fetchEngineersByProject(project);
     const answers = this.fetchFormQuestionsAnswers();
     const rows = engineers.map(row => row[0]);
     const colums = answers.map(row => row[0]);

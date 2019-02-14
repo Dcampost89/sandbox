@@ -30,15 +30,15 @@ function engineersFormResponsesHandler(e) {
     form.getId(),
     FORM_TYPES.ENGINEER
   );
+  responsesHandler.onFormSubmitHandler(e);
+}
 
-  function pmAndDmFormResponsesHandler(e) {
-    Logger.log("pmAndDmFormResponsesHandler");
-    const form = e.source;
-    const responsesHandler = new FormResponsesHandler(
-      form.getId(),
-      FORM_TYPES.PROJECT_MANAGER
-    );
-  }
-
+function pmAndDmFormResponsesHandler(e) {
+  Logger.log("pmAndDmFormResponsesHandler");
+  const form = e.source;
+  const responsesHandler = new FormResponsesHandler(
+    form.getId(),
+    FORM_TYPES.PROJECT_MANAGER
+  );
   responsesHandler.onFormSubmitHandler(e);
 }
