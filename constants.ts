@@ -41,7 +41,8 @@ const SHEETS = {
   PROJECT_MANEGERS: "ProjectManagers",
   FORM_RESPONSES: "Responses",
   QUESTIONS: {
-    ENGINEER_WEEK_2: "EngineersW2"
+    ENGINEER_WEEK_2: "EngineersW2",
+    PROJECT_MANAGER_WEEK_2: "ProjectManagersW2"
   }
 };
 
@@ -60,7 +61,10 @@ const TITLES = {
     "if you answered 'Strongly Disagree' or 'Disagree', can you say a bit more?",
   SUM: "SUM",
   EMAIL: "Email Address",
-  ENGINEER_FORM_WEEK_2: "Health Report Engineers - W2"
+  FORMS: {
+    ENGINEER_FORM_WEEK_2: "Health Report Engineers - W2",
+    PROJECT_MANAGER_WEEK_2: "Health Report Project Managers - W2"
+  }
 };
 
 export { FORM_TYPES, SPREADSHEET_COLUMS, SHEETS, FILES, TITLES };

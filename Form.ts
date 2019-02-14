@@ -81,6 +81,10 @@ export class Form {
       .setTitle(title)
       .setGoToPage(FormApp.PageNavigationType.SUBMIT);
     if (this.formType === FORM_TYPES.ENGINEER) {
+      this.form
+        .addTextItem()
+        .setTitle(TITLES.EMAIL)
+        .setRequired(true);
       this.questions.forEach(question => {
         this.addMultipleChoiceField(question);
         this.addTextField(TITLES.TEXT_FIELD);
