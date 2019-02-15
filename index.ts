@@ -1,7 +1,8 @@
 import { Form } from "./Form";
 import { FormResponsesHandler } from "./FormResponsesHandler";
+import { Email } from "./Email";
 import { FORM_TYPES, SHEETS, TITLES } from "./constants";
-import { setFormSubmitTrigger } from "./utils";
+import { setFormSubmitTrigger, readDataFromSpreadsheet } from "./utils";
 
 function createEngineersW2Form() {
   const newForm = new Form(
@@ -11,6 +12,19 @@ function createEngineersW2Form() {
   );
 
   setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
+
+  const engineers = readDataFromSpreadsheet(
+    SpreadsheetApp.getActive(),
+    SHEETS.ENGINEERS
+  );
+  const recipients = engineers.map(row => row[1]).join(",");
+  const email = new Email(
+    recipients,
+    "Project Health Check for Wizeline Teams",
+    "engineers_email.html",
+    newForm.getFormUrl()
+  );
+  email.sendEmail();
 }
 
 function createProjectManagerW2Form() {
