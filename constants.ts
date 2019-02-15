@@ -58,7 +58,7 @@ const TITLES = {
   CONFIRM_MESSAGE: "Gracias por llenar el formulario",
   SECTION_TITLE: "Project Health",
   TEXT_FIELD:
-    "if you answered 'Strongly Disagree' or 'Disagree', can you say a bit more?",
+    "If you answered 'Strongly Disagree' or 'Disagree', can you say a bit more?",
   SUM: "SUM",
   EMAIL: "Email Address",
   FORMS: {
