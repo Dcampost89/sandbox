@@ -36,7 +36,7 @@ export class FormResponsesHandler {
     } else {
       const newRowsToAppend = this.fetchPmAndDmFormResponses(itemResponses);
       newRowsToAppend.forEach(element => {
-        responsesSheet.push(element);
+        responsesSheet.appendRow(element);
       });
     }
     this.setSumColumColorFormat(responsesSheet);
@@ -65,11 +65,16 @@ export class FormResponsesHandler {
     for (let i = 0; i < engineers.length; i++) {
       const row: any[] = [];
       let total: number = 0;
+      row.push(engineers[i][1]);
       responses.forEach(element => {
         let resp: any = element.getResponse();
         const respType: string = element.getItem().getType();
         if (respType == "GRID") {
           resp = resp[i];
+          const value = this.getResponseNumericValue(resp);
+          total += value;
+          row.push(value);
+        } else if (respType == "MULTIPLE_CHOICE") {
           const value = this.getResponseNumericValue(resp);
           total += value;
           row.push(value);

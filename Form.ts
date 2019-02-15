@@ -48,31 +48,41 @@ export class Form {
         FormApp.DestinationType.SPREADSHEET,
         this.formResponsesFile.getId()
       );
-    if (this.formType === FORM_TYPES.ENGINEER) {
+    /* if (this.formType === FORM_TYPES.ENGINEER) {
       this.form.setCollectEmail(true);
-    }
+    } */
     this.createFormSections();
     this.saveFormInRootFolder();
   }
 
   private createFormSections() {
-    const projectsListField = this.form
-      .addListItem()
-      .setTitle(TITLES.PROJECT_FIELD);
-    const projectsList = this.fetchProjectsList();
-    const choices = [];
-    if (this.formType === FORM_TYPES.ENGINEER) {
+    if (this.formType == FORM_TYPES.ENGINEER) {
+      this.form
+        .addTextItem()
+        .setTitle(TITLES.EMAIL)
+        .setRequired(true);
+      const projectsListField = this.form
+        .addListItem()
+        .setTitle(TITLES.PROJECT_FIELD);
+      const projectsList = this.fetchProjectsList();
+      const choices = [];
       const section = this.generateFormSectionContent(TITLES.SECTION_TITLE);
       projectsList.forEach(project => {
         choices.push(projectsListField.createChoice(project[0], section));
       });
+      projectsListField.setChoices(choices);
     } else {
+      const projectsListField = this.form
+        .addListItem()
+        .setTitle(TITLES.PROJECT_FIELD);
+      const projectsList = this.fetchProjectsList();
+      const choices = [];
       projectsList.forEach(project => {
         const section = this.generateFormSectionContent(project[0]);
         choices.push(projectsListField.createChoice(project[0], section));
       });
+      projectsListField.setChoices(choices);
     }
-    projectsListField.setChoices(choices);
   }
 
   private generateFormSectionContent(title) {
@@ -80,15 +90,15 @@ export class Form {
       .addPageBreakItem()
       .setTitle(title)
       .setGoToPage(FormApp.PageNavigationType.SUBMIT);
-    if (this.formType === FORM_TYPES.ENGINEER) {
+    if (this.formType == FORM_TYPES.ENGINEER) {
+      for (let i = 0; i < this.questions.length - 1; i++) {
+        this.addMultipleChoiceField(this.questions[i]);
+        this.addTextField(TITLES.TEXT_FIELD);
+      }
       this.form
         .addTextItem()
-        .setTitle(TITLES.EMAIL)
+        .setTitle(this.questions[this.questions.length - 1])
         .setRequired(true);
-      this.questions.forEach(question => {
-        this.addMultipleChoiceField(question);
-        this.addTextField(TITLES.TEXT_FIELD);
-      });
     } else {
       this.questions.forEach((question, index) => {
         if (index > 1) {
