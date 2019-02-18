@@ -12,7 +12,7 @@ const readDataFromSpreadsheet = (spreadSheet, sheet) => {
   return data;
 };
 
-const readSpreadsheetDataFromKey = (data: [string], key: string) => {
+const readSpreadsheetDataFromKey = (data: string[], key: string) => {
   let value = data.filter(row => {
     return row[0] === key;
   });

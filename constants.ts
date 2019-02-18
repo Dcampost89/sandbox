@@ -54,6 +54,7 @@ const FILES = {
 const TITLES = {
   TITLE: "Title",
   DESCRIPTION: "Description",
+  ROOT_FOLDER: "Root Folder",
   PROJECT_FIELD: "Project",
   CONFIRM_MESSAGE: "Gracias por llenar el formulario",
   SECTION_TITLE: "Project Health",
