@@ -21,6 +21,7 @@ export class FolderStructure {
       data,
       TITLES.ROOT_FOLDER
     );
+    Logger.log("rootFolderUrl %s", rootFolderURL);
     const breadcrumbs: string[] = rootFolderURL.split("/");
     let rootFolder;
     for (let i = 0; i < breadcrumbs.length; i++) {
