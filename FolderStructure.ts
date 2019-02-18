@@ -24,8 +24,10 @@ export class FolderStructure {
     Logger.log("rootFolderUrl %s", rootFolderURL);
     const breadcrumbs: string[] = rootFolderURL.split("/");
     let rootFolder;
-    for (let i = 0; i < breadcrumbs.length; i++) {
-      const folder: any = DriveApp.getFoldersByName(breadcrumbs[i]);
+    for (let i = 1; i < breadcrumbs.length; i++) {
+      const folder: any = !rootFolder
+        ? DriveApp.getFoldersByName(breadcrumbs[i])
+        : rootFolder.getFoldersByName(breadcrumbs[i]);
       if (!folder.hasNext()) {
         rootFolder = null;
         break;
