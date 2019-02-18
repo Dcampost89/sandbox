@@ -56,7 +56,7 @@ const TITLES = {
   DESCRIPTION: "Description",
   ROOT_FOLDER: "Root Folder",
   PROJECT_FIELD: "Project",
-  CONFIRM_MESSAGE: "Gracias por llenar el formulario",
+  CONFIRM_MESSAGE: "Confirmation",
   SECTION_TITLE: "Project Health",
   TEXT_FIELD:
     "If you answered 'Strongly Disagree' or 'Disagree', can you say a bit more?",

@@ -40,10 +40,11 @@ export class Form {
     const data = readDataFromSpreadsheet(this.formDataFile, SHEETS.GENERAL);
     const title = readSpreadsheetDataFromKey(data, TITLES.TITLE);
     const desc = readSpreadsheetDataFromKey(data, TITLES.DESCRIPTION);
+    const confirmMg = readSpreadsheetDataFromKey(data, TITLES.CONFIRM_MESSAGE);
     this.form = FormApp.create(this.title)
       .setTitle(title)
       .setDescription(desc)
-      .setConfirmationMessage(TITLES.CONFIRM_MESSAGE)
+      .setConfirmationMessage(confirmMg)
       .setDestination(
         FormApp.DestinationType.SPREADSHEET,
         this.formResponsesFile.getId()
