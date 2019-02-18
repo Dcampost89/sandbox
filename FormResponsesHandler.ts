@@ -95,20 +95,35 @@ export class FormResponsesHandler {
     const letterRange = SPREADSHEET_COLUMS[lastColum] + lastRow;
     const range = sheet.getRange(letterRange);
 
+    let maxRange: number;
+    let minRange: number;
+
+    switch (this.formType) {
+      case FORM_TYPES.PROJECT_MANAGER:
+        maxRange = 33;
+        minRange = 24;
+      case FORM_TYPES.DELIVERY_MANAGER:
+        maxRange = 28;
+        minRange = 20;
+      default:
+        maxRange = 18;
+        minRange = 11;
+    }
+
     const greenRule = SpreadsheetApp.newConditionalFormatRule()
-      .whenNumberGreaterThanOrEqualTo(33)
+      .whenNumberGreaterThanOrEqualTo(maxRange)
       .setBackground("#32CD32")
       .setRanges([range])
       .build();
 
     const yellowRule = SpreadsheetApp.newConditionalFormatRule()
-      .whenNumberBetween(25, 32)
+      .whenNumberBetween(minRange + 1, maxRange - 1)
       .setBackground("#FFFFE0")
       .setRanges([range])
       .build();
 
     const redRule = SpreadsheetApp.newConditionalFormatRule()
-      .whenNumberLessThanOrEqualTo(24)
+      .whenNumberLessThanOrEqualTo(minRange)
       .setBackground("#F08080")
       .setRanges([range])
       .build();
