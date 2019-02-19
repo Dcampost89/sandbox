@@ -33,13 +33,14 @@ export class FormResponsesHandler {
     if (this.formType == FORM_TYPES.ENGINEER) {
       const newRowToAppend = this.fetchEngineersFormResponses(itemResponses);
       responsesSheet.appendRow(newRowToAppend);
+      this.setSumColumColorFormat(responsesSheet);
     } else {
       const newRowsToAppend = this.fetchPmAndDmFormResponses(itemResponses);
       newRowsToAppend.forEach(element => {
         responsesSheet.appendRow(element);
+        this.setSumColumColorFormat(responsesSheet);
       });
     }
-    this.setSumColumColorFormat(responsesSheet);
   }
 
   private fetchEngineersFormResponses(responses: any[]) {
