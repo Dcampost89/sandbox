@@ -48,7 +48,11 @@ export class Form {
       .setDestination(
         FormApp.DestinationType.SPREADSHEET,
         this.formResponsesFile.getId()
-      );
+      )
+      .setRequireLogin(false);
+    if (this.formType === FORM_TYPES.PROJECT_MANAGER) {
+      this.form.setCollectEmail(true);
+    }
     this.createFormSections();
   }
 

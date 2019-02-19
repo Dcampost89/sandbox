@@ -13,19 +13,9 @@ export class FormResponsesHandler {
   }
 
   public onFormSubmitHandler(e: any) {
-    Logger.log("onFormSubmitHandler");
     const form = e.source;
     const formResponses = e.response;
     const itemResponses = formResponses.getItemResponses();
-
-    itemResponses.forEach(element => {
-      Logger.log(
-        "question %s of type %s answer %s",
-        element.getItem().getTitle(),
-        element.getItem().getType(),
-        element.getResponse()
-      );
-    });
 
     this.formResponsesFile = SpreadsheetApp.openById(form.getDestinationId());
     const responsesSheet = this.getResponsesSheet(itemResponses);
@@ -35,7 +25,11 @@ export class FormResponsesHandler {
       responsesSheet.appendRow(newRowToAppend);
       this.setSumColumColorFormat(responsesSheet);
     } else {
-      const newRowsToAppend = this.fetchPmAndDmFormResponses(itemResponses);
+      const respondentEmail = formResponses.getRespondentEmail();
+      const newRowsToAppend = this.fetchPmAndDmFormResponses(
+        itemResponses,
+        respondentEmail
+      );
       newRowsToAppend.forEach(element => {
         responsesSheet.appendRow(element);
         this.setSumColumColorFormat(responsesSheet);
@@ -60,12 +54,13 @@ export class FormResponsesHandler {
     return row;
   }
 
-  private fetchPmAndDmFormResponses(responses: any[]) {
+  private fetchPmAndDmFormResponses(responses: any[], respondentEmail: string) {
     const rows: any[][] = [];
     const engineers = this.fetchEngineersByProject(responses[0].getResponse());
     for (let i = 0; i < engineers.length; i++) {
       const row: any[] = [];
       let total: number = 0;
+      row.push(respondentEmail);
       row.push(engineers[i][1]);
       responses.forEach(element => {
         let resp: any = element.getResponse();
@@ -143,7 +138,8 @@ export class FormResponsesHandler {
       sheet = this.formResponsesFile.insertSheet(SHEETS.FORM_RESPONSES);
       const row = [];
       if (this.formType != FORM_TYPES.ENGINEER) {
-        row.push(TITLES.EMAIL);
+        row.push(SHEETS.ENGINEERS);
+        row.push(SHEETS.PROJECT_MANEGERS);
       }
       responses.forEach(element => {
         const question = element.getItem().getTitle();

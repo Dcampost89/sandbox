@@ -38,7 +38,7 @@ const SHEETS = {
   PROJECTS: "Projects",
   GENERAL: "General",
   ANSWERS: "Answers",
-  PROJECT_MANEGERS: "ProjectManagers",
+  PROJECT_MANEGERS: "Project Managers",
   FORM_RESPONSES: "Responses",
   QUESTIONS: {
     ENGINEER_WEEK_2: "EngineersW2",
