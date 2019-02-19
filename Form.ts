@@ -49,19 +49,13 @@ export class Form {
         FormApp.DestinationType.SPREADSHEET,
         this.formResponsesFile.getId()
       )
-      .setRequireLogin(false);
-    if (this.formType === FORM_TYPES.PROJECT_MANAGER) {
-      this.form.setCollectEmail(true);
-    }
+      .setRequireLogin(false)
+      .setCollectEmail(true);
     this.createFormSections();
   }
 
   private createFormSections() {
     if (this.formType == FORM_TYPES.ENGINEER) {
-      this.form
-        .addTextItem()
-        .setTitle(TITLES.EMAIL)
-        .setRequired(true);
       const projectsListField = this.form
         .addListItem()
         .setTitle(TITLES.PROJECT_FIELD);

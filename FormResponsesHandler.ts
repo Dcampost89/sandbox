@@ -16,16 +16,19 @@ export class FormResponsesHandler {
     const form = e.source;
     const formResponses = e.response;
     const itemResponses = formResponses.getItemResponses();
+    const respondentEmail = formResponses.getRespondentEmail();
 
     this.formResponsesFile = SpreadsheetApp.openById(form.getDestinationId());
     const responsesSheet = this.getResponsesSheet(itemResponses);
 
     if (this.formType == FORM_TYPES.ENGINEER) {
-      const newRowToAppend = this.fetchEngineersFormResponses(itemResponses);
+      const newRowToAppend = this.fetchEngineersFormResponses(
+        itemResponses,
+        respondentEmail
+      );
       responsesSheet.appendRow(newRowToAppend);
       this.setSumColumColorFormat(responsesSheet);
     } else {
-      const respondentEmail = formResponses.getRespondentEmail();
       const newRowsToAppend = this.fetchPmAndDmFormResponses(
         itemResponses,
         respondentEmail
@@ -37,9 +40,13 @@ export class FormResponsesHandler {
     }
   }
 
-  private fetchEngineersFormResponses(responses: any[]) {
+  private fetchEngineersFormResponses(
+    responses: any[],
+    respondentEmail: string
+  ) {
     const row: any[] = [];
     let total: number = 0;
+    row.push(respondentEmail);
     responses.forEach(element => {
       const resp: any = element.getResponse();
       if (element.getItem().getType() == "MULTIPLE_CHOICE") {
@@ -98,9 +105,11 @@ export class FormResponsesHandler {
       case FORM_TYPES.PROJECT_MANAGER:
         maxRange = 33;
         minRange = 24;
+        break;
       case FORM_TYPES.DELIVERY_MANAGER:
         maxRange = 28;
         minRange = 20;
+        break;
       default:
         maxRange = 18;
         minRange = 11;
@@ -137,9 +146,16 @@ export class FormResponsesHandler {
     if (!sheet) {
       sheet = this.formResponsesFile.insertSheet(SHEETS.FORM_RESPONSES);
       const row = [];
-      if (this.formType != FORM_TYPES.ENGINEER) {
-        row.push(SHEETS.ENGINEERS);
-        row.push(SHEETS.PROJECT_MANEGERS);
+      switch (this.formType) {
+        case FORM_TYPES.PROJECT_MANAGER:
+          row.push(SHEETS.PROJECT_MANEGERS);
+          row.push(SHEETS.ENGINEERS);
+          break;
+        case FORM_TYPES.DELIVERY_MANAGER:
+          row.push(SHEETS.DELIVERY_MANAGERS);
+          break;
+        default:
+          row.push(SHEETS.ENGINEERS);
       }
       responses.forEach(element => {
         const question = element.getItem().getTitle();
