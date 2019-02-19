@@ -50,11 +50,27 @@ function createProjectManagerW2Form() {
     folderStructure.getRootFolder()
   );
 
+  folderStructure.saveFileInFolder(newForm.getFormId());
+  folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
+
   setFormSubmitTrigger("pmAndDmFormResponsesHandler", newForm.getFormId());
+
+  const projectManagers = readDataFromSpreadsheet(
+    SpreadsheetApp.getActive(),
+    SHEETS.PROJECT_MANEGERS
+  );
+  const recipients = projectManagers.map(row => row[1]).join(",");
+
+  const email = new Email(
+    recipients,
+    "Project Health Check for Wizeline Teams",
+    "pm_dm_email.html",
+    newForm.getFormUrl()
+  );
+  email.sendEmail();
 }
 
 function engineersFormResponsesHandler(e) {
-  Logger.log("engineersFormResponsesHandler");
   const form = e.source;
   const responsesHandler = new FormResponsesHandler(
     form.getId(),
@@ -64,7 +80,6 @@ function engineersFormResponsesHandler(e) {
 }
 
 function pmAndDmFormResponsesHandler(e) {
-  Logger.log("pmAndDmFormResponsesHandler");
   const form = e.source;
   const responsesHandler = new FormResponsesHandler(
     form.getId(),
