@@ -53,13 +53,53 @@ function createProjectManagerW2Form() {
   folderStructure.saveFileInFolder(newForm.getFormId());
   folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
 
-  setFormSubmitTrigger("pmAndDmFormResponsesHandler", newForm.getFormId());
+  setFormSubmitTrigger(
+    "projectManagersFormResponsesHandler",
+    newForm.getFormId()
+  );
 
   const projectManagers = readDataFromSpreadsheet(
     SpreadsheetApp.getActive(),
     SHEETS.PROJECT_MANEGERS
   );
   const recipients = projectManagers.map(row => row[1]).join(",");
+
+  const email = new Email(
+    recipients,
+    "Project Health Check for Wizeline Teams",
+    "pm_dm_email.html",
+    newForm.getFormUrl()
+  );
+  email.sendEmail();
+}
+
+function createDeliveryManagerForm() {
+  const folderStructure = new FolderStructure();
+  if (!folderStructure.getRootFolder()) {
+    Logger.log("The root folder was not found");
+    return;
+  }
+
+  const newForm = new Form(
+    TITLES.FORMS.DELIVERY_MANAGER,
+    SHEETS.QUESTIONS.DELIVERY_MANAGER,
+    FORM_TYPES.DELIVERY_MANAGER,
+    folderStructure.getRootFolder()
+  );
+
+  folderStructure.saveFileInFolder(newForm.getFormId());
+  folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
+
+  setFormSubmitTrigger(
+    "deliveryManagersFormResponsesHandler",
+    newForm.getFormId()
+  );
+
+  const deliveryManagers = readDataFromSpreadsheet(
+    SpreadsheetApp.getActive(),
+    SHEETS.DELIVERY_MANAGERS
+  );
+  const recipients = deliveryManagers.map(row => row[1]).join(",");
 
   const email = new Email(
     recipients,
@@ -79,11 +119,20 @@ function engineersFormResponsesHandler(e) {
   responsesHandler.onFormSubmitHandler(e);
 }
 
-function pmAndDmFormResponsesHandler(e) {
+function projectManagersFormResponsesHandler(e) {
   const form = e.source;
   const responsesHandler = new FormResponsesHandler(
     form.getId(),
     FORM_TYPES.PROJECT_MANAGER
+  );
+  responsesHandler.onFormSubmitHandler(e);
+}
+
+function deliveryManagersFormResponsesHandler(e) {
+  const form = e.source;
+  const responsesHandler = new FormResponsesHandler(
+    form.getId(),
+    FORM_TYPES.DELIVERY_MANAGER
   );
   responsesHandler.onFormSubmitHandler(e);
 }
