@@ -13,38 +13,40 @@ export class FormResponsesHandler {
   }
 
   public onFormSubmitHandler(e: any) {
-    Logger.log("onFormSubmitHandler");
     const form = e.source;
     const formResponses = e.response;
     const itemResponses = formResponses.getItemResponses();
-
-    itemResponses.forEach(element => {
-      Logger.log(
-        "question %s of type %s answer %s",
-        element.getItem().getTitle(),
-        element.getItem().getType(),
-        element.getResponse()
-      );
-    });
+    const respondentEmail = formResponses.getRespondentEmail();
 
     this.formResponsesFile = SpreadsheetApp.openById(form.getDestinationId());
     const responsesSheet = this.getResponsesSheet(itemResponses);
 
     if (this.formType == FORM_TYPES.ENGINEER) {
-      const newRowToAppend = this.fetchEngineersFormResponses(itemResponses);
+      const newRowToAppend = this.fetchEngineersFormResponses(
+        itemResponses,
+        respondentEmail
+      );
       responsesSheet.appendRow(newRowToAppend);
+      this.setSumColumColorFormat(responsesSheet);
     } else {
-      const newRowsToAppend = this.fetchPmAndDmFormResponses(itemResponses);
+      const newRowsToAppend = this.fetchPmAndDmFormResponses(
+        itemResponses,
+        respondentEmail
+      );
       newRowsToAppend.forEach(element => {
         responsesSheet.appendRow(element);
+        this.setSumColumColorFormat(responsesSheet);
       });
     }
-    this.setSumColumColorFormat(responsesSheet);
   }
 
-  private fetchEngineersFormResponses(responses: any[]) {
+  private fetchEngineersFormResponses(
+    responses: any[],
+    respondentEmail: string
+  ) {
     const row: any[] = [];
     let total: number = 0;
+    row.push(respondentEmail);
     responses.forEach(element => {
       const resp: any = element.getResponse();
       if (element.getItem().getType() == "MULTIPLE_CHOICE") {
@@ -59,12 +61,13 @@ export class FormResponsesHandler {
     return row;
   }
 
-  private fetchPmAndDmFormResponses(responses: any[]) {
+  private fetchPmAndDmFormResponses(responses: any[], respondentEmail: string) {
     const rows: any[][] = [];
     const engineers = this.fetchEngineersByProject(responses[0].getResponse());
     for (let i = 0; i < engineers.length; i++) {
       const row: any[] = [];
       let total: number = 0;
+      row.push(respondentEmail);
       row.push(engineers[i][1]);
       responses.forEach(element => {
         let resp: any = element.getResponse();
@@ -95,20 +98,37 @@ export class FormResponsesHandler {
     const letterRange = SPREADSHEET_COLUMS[lastColum] + lastRow;
     const range = sheet.getRange(letterRange);
 
+    let maxRange: number;
+    let minRange: number;
+
+    switch (this.formType) {
+      case FORM_TYPES.PROJECT_MANAGER:
+        maxRange = 33;
+        minRange = 24;
+        break;
+      case FORM_TYPES.DELIVERY_MANAGER:
+        maxRange = 28;
+        minRange = 20;
+        break;
+      default:
+        maxRange = 18;
+        minRange = 11;
+    }
+
     const greenRule = SpreadsheetApp.newConditionalFormatRule()
-      .whenNumberGreaterThanOrEqualTo(33)
+      .whenNumberGreaterThanOrEqualTo(maxRange)
       .setBackground("#32CD32")
       .setRanges([range])
       .build();
 
     const yellowRule = SpreadsheetApp.newConditionalFormatRule()
-      .whenNumberBetween(25, 32)
+      .whenNumberBetween(minRange + 1, maxRange - 1)
       .setBackground("#FFFFE0")
       .setRanges([range])
       .build();
 
     const redRule = SpreadsheetApp.newConditionalFormatRule()
-      .whenNumberLessThanOrEqualTo(24)
+      .whenNumberLessThanOrEqualTo(minRange)
       .setBackground("#F08080")
       .setRanges([range])
       .build();
@@ -126,8 +146,16 @@ export class FormResponsesHandler {
     if (!sheet) {
       sheet = this.formResponsesFile.insertSheet(SHEETS.FORM_RESPONSES);
       const row = [];
-      if (this.formType != FORM_TYPES.ENGINEER) {
-        row.push(TITLES.EMAIL);
+      switch (this.formType) {
+        case FORM_TYPES.PROJECT_MANAGER:
+          row.push(SHEETS.PROJECT_MANEGERS);
+          row.push(SHEETS.ENGINEERS);
+          break;
+        case FORM_TYPES.DELIVERY_MANAGER:
+          row.push(SHEETS.DELIVERY_MANAGERS);
+          break;
+        default:
+          row.push(SHEETS.ENGINEERS);
       }
       responses.forEach(element => {
         const question = element.getItem().getTitle();

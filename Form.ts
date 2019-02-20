@@ -1,8 +1,8 @@
-/* import {
+/*import {
   readDataFromSpreadsheet,
   readSpreadsheetDataFromKey,
   createSpreadsheet
-} from "./utils"; */
+} from "./utils";*/
 
 import { FORM_TYPES, SHEETS, FILES, TITLES } from "./constants";
 
@@ -17,16 +17,16 @@ export class Form {
   formResponsesFile: any;
   formType: string;
 
-  constructor(title, questionsSheetName, type) {
+  constructor(title, questionsSheetName, type, rootFolder) {
     this.title = title;
     this.questionsSheetName = questionsSheetName;
     this.formType = type;
+    this.rootFolder = rootFolder;
+    this.formDataFile = SpreadsheetApp.getActive();
     this.init();
   }
 
   private init() {
-    this.rootFolder = DriveApp.getFoldersByName(FILES.ROOT_FOLDER).next();
-    this.formDataFile = SpreadsheetApp.getActive();
     const formQuestions = this.rootFolder
       .getFilesByName(FILES.QUESTIONS_FILE)
       .next();
@@ -40,27 +40,22 @@ export class Form {
     const data = readDataFromSpreadsheet(this.formDataFile, SHEETS.GENERAL);
     const title = readSpreadsheetDataFromKey(data, TITLES.TITLE);
     const desc = readSpreadsheetDataFromKey(data, TITLES.DESCRIPTION);
+    const confirmMg = readSpreadsheetDataFromKey(data, TITLES.CONFIRM_MESSAGE);
     this.form = FormApp.create(this.title)
       .setTitle(title)
       .setDescription(desc)
-      .setConfirmationMessage(TITLES.CONFIRM_MESSAGE)
+      .setConfirmationMessage(confirmMg)
       .setDestination(
         FormApp.DestinationType.SPREADSHEET,
         this.formResponsesFile.getId()
-      );
-    /* if (this.formType === FORM_TYPES.ENGINEER) {
-      this.form.setCollectEmail(true);
-    } */
+      )
+      .setRequireLogin(false)
+      .setCollectEmail(true);
     this.createFormSections();
-    this.saveFormInRootFolder();
   }
 
   private createFormSections() {
     if (this.formType == FORM_TYPES.ENGINEER) {
-      this.form
-        .addTextItem()
-        .setTitle(TITLES.EMAIL)
-        .setRequired(true);
       const projectsListField = this.form
         .addListItem()
         .setTitle(TITLES.PROJECT_FIELD);
@@ -112,17 +107,6 @@ export class Form {
     return section;
   }
 
-  private saveFormInRootFolder() {
-    const formFile = DriveApp.getFileById(this.form.getId());
-    const formResponsesFile = DriveApp.getFileById(
-      this.formResponsesFile.getId()
-    );
-    this.rootFolder.addFile(formFile);
-    this.rootFolder.addFile(formResponsesFile);
-    DriveApp.removeFile(formFile);
-    DriveApp.removeFile(formResponsesFile);
-  }
-
   public getFormId() {
     return this.form.getId();
   }
@@ -133,6 +117,10 @@ export class Form {
 
   public getFormType() {
     return this.formType;
+  }
+
+  public getFormResponsesFile() {
+    return this.formResponsesFile.getId();
   }
 
   private fetchProjectsList() {

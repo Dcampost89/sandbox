@@ -38,7 +38,8 @@ const SHEETS = {
   PROJECTS: "Projects",
   GENERAL: "General",
   ANSWERS: "Answers",
-  PROJECT_MANEGERS: "ProjectManagers",
+  PROJECT_MANEGERS: "Project Managers",
+  DELIVERY_MANAGERS: "Delivery Managers",
   FORM_RESPONSES: "Responses",
   QUESTIONS: {
     ENGINEER_WEEK_2: "EngineersW2",
@@ -54,8 +55,9 @@ const FILES = {
 const TITLES = {
   TITLE: "Title",
   DESCRIPTION: "Description",
+  ROOT_FOLDER: "Root Folder",
   PROJECT_FIELD: "Project",
-  CONFIRM_MESSAGE: "Gracias por llenar el formulario",
+  CONFIRM_MESSAGE: "Confirmation",
   SECTION_TITLE: "Project Health",
   TEXT_FIELD:
     "If you answered 'Strongly Disagree' or 'Disagree', can you say a bit more?",
