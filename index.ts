@@ -90,10 +90,10 @@ function createDeliveryManagerForm() {
   folderStructure.saveFileInFolder(newForm.getFormId());
   folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
 
-  // setFormSubmitTrigger(
-  //   "deliveryManagersFormResponsesHandler",
-  //   newForm.getFormId()
-  // );
+  setFormSubmitTrigger(
+    "deliveryManagersFormResponsesHandler",
+    newForm.getFormId()
+  );
 
   // const deliveryManagers = readDataFromSpreadsheet(
   //   SpreadsheetApp.getActive(),
