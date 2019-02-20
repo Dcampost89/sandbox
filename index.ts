@@ -95,19 +95,19 @@ function createDeliveryManagerForm() {
     newForm.getFormId()
   );
 
-  // const deliveryManagers = readDataFromSpreadsheet(
-  //   SpreadsheetApp.getActive(),
-  //   SHEETS.DELIVERY_MANAGERS
-  // );
-  // const recipients = deliveryManagers.map(row => row[1]).join(",");
+  const deliveryManagers = readDataFromSpreadsheet(
+    SpreadsheetApp.getActive(),
+    SHEETS.DELIVERY_MANAGERS
+  );
+  const recipients = deliveryManagers.map(row => row[1]).join(",");
 
-  // const email = new Email(
-  //   recipients,
-  //   "Project Health Check for Wizeline Teams",
-  //   "pm_dm_email.html",
-  //   newForm.getFormUrl()
-  // );
-  // email.sendEmail();
+  const email = new Email(
+    recipients,
+    "Project Health Check for Wizeline Teams",
+    "pm_dm_email.html",
+    newForm.getFormUrl()
+  );
+  email.sendEmail();
 }
 
 function engineersFormResponsesHandler(e) {
