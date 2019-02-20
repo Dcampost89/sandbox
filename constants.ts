@@ -43,7 +43,8 @@ const SHEETS = {
   FORM_RESPONSES: "Responses",
   QUESTIONS: {
     ENGINEER_WEEK_2: "EngineersW2",
-    PROJECT_MANAGER_WEEK_2: "ProjectManagersW2"
+    PROJECT_MANAGER_WEEK_2: "ProjectManagersW2",
+    DELIVERY_MANAGER: "DeliveryManagers"
   }
 };
 
@@ -65,7 +66,8 @@ const TITLES = {
   EMAIL: "Email Address",
   FORMS: {
     ENGINEER_FORM_WEEK_2: "Health Report Engineers - W2",
-    PROJECT_MANAGER_WEEK_2: "Health Report Project Managers - W2"
+    PROJECT_MANAGER_WEEK_2: "Health Report Project Managers - W2",
+    DELIVERY_MANAGER: "Health Report Delivery Managers"
   }
 };
 

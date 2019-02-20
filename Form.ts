@@ -95,8 +95,12 @@ export class Form {
         .setTitle(this.questions[this.questions.length - 1])
         .setRequired(true);
     } else {
+      let tableFieldsStartingAt = 1;
+      if (this.formType == FORM_TYPES.DELIVERY_MANAGER) {
+        tableFieldsStartingAt = 2;
+      }
       this.questions.forEach((question, index) => {
-        if (index > 1) {
+        if (index > tableFieldsStartingAt) {
           this.addTableField(question, title);
         } else {
           this.addMultipleChoiceField(question);
