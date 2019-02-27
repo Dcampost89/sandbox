@@ -23,18 +23,18 @@ function createEngineersW2Form() {
 
   setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
 
-  // const engineers = readDataFromSpreadsheet(
-  //   SpreadsheetApp.getActive(),
-  //   SHEETS.ENGINEERS
-  // );
-  // const recipients = engineers.map(row => row[1]).join(",");
-  // const email = new Email(
-  //   recipients,
-  //   "Project Health Check for Wizeline Teams",
-  //   "engineers_email.html",
-  //   newForm.getFormUrl()
-  // );
-  // email.sendEmail();
+  const engineers = readDataFromSpreadsheet(
+    SpreadsheetApp.getActive(),
+    SHEETS.ENGINEERS
+  );
+  const recipients = engineers.map(row => row[1]).join(",");
+  const email = new Email(
+    recipients,
+    "Project Health Check for Wizeline Teams",
+    "engineers_email.html",
+    newForm.getFormUrl()
+  );
+  email.sendEmail();
 }
 
 function createProjectManagerW2Form() {
