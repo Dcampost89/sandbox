@@ -1,6 +1,21 @@
 import { readDataFromSpreadsheet, readSpreadsheetDataFromKey } from "./utils";
 import { SHEETS, TITLES } from "./constants";
 
+const months: string[] = [
+  "enero",
+  "febrero",
+  "marzo",
+  "abril",
+  "mayo",
+  "junio",
+  "julio",
+  "agosto",
+  "septiembre",
+  "octubre",
+  "noviembre",
+  "diciembre"
+];
+
 export class FolderStructure {
   rootFolder: any;
   currentFolder: any;
@@ -9,32 +24,43 @@ export class FolderStructure {
   constructor() {
     this.generalDataFile = SpreadsheetApp.getActive();
     this.rootFolder = this.setRootFolder();
-    this.currentFolder = this.rootFolder;
+    this.init();
+  }
+
+  init() {
+    const today = new Date();
+    const currentDay: number = today.getDate();
+    const currentMonth: number = today.getMonth();
+    const newFolderName = `${months[currentMonth]}/${currentDay}`;
+    this.currentFolder = this.createFolder(newFolderName);
   }
 
   private setRootFolder() {
-    const data: [] = readDataFromSpreadsheet(
-      this.generalDataFile,
-      SHEETS.GENERAL
-    );
-    const rootFolderURL: string = readSpreadsheetDataFromKey(
-      data,
-      TITLES.ROOT_FOLDER
-    );
-    Logger.log("rootFolderUrl %s", rootFolderURL);
-    const breadcrumbs: string[] = rootFolderURL.split("/");
-    let rootFolder;
-    for (let i = 1; i < breadcrumbs.length; i++) {
-      const folder: any = !rootFolder
-        ? DriveApp.getFoldersByName(breadcrumbs[i])
-        : rootFolder.getFoldersByName(breadcrumbs[i]);
-      if (!folder.hasNext()) {
-        rootFolder = null;
-        break;
-      } else {
-        rootFolder = folder.next();
-      }
-    }
+    const currentFile = DriveApp.getFileById(this.generalDataFile.getId());
+    const parentFoldersIterator = currentFile.getParents();
+    const rootFolder = parentFoldersIterator.next();
+    // const data: [] = readDataFromSpreadsheet(
+    //   this.generalDataFile,
+    //   SHEETS.GENERAL
+    // );
+    // const rootFolderURL: string = readSpreadsheetDataFromKey(
+    //   data,
+    //   TITLES.ROOT_FOLDER
+    // );
+    // Logger.log("rootFolderUrl %s", rootFolderURL);
+    // const breadcrumbs: string[] = rootFolderURL.split("/");
+    // let rootFolder;
+    // for (let i = 1; i < breadcrumbs.length; i++) {
+    //   const folder: any = !rootFolder
+    //     ? DriveApp.getFoldersByName(breadcrumbs[i])
+    //     : rootFolder.getFoldersByName(breadcrumbs[i]);
+    //   if (!folder.hasNext()) {
+    //     rootFolder = null;
+    //     break;
+    //   } else {
+    //     rootFolder = folder.next();
+    //   }
+    // }
     return rootFolder;
   }
 
@@ -45,7 +71,7 @@ export class FolderStructure {
   }
 
   public createFolder(name: string) {
-    this.rootFolder.createFolder(name);
+    return this.rootFolder.createFolder(name);
   }
 
   public getRootFolder() {
