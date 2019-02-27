@@ -21,7 +21,7 @@ function createEngineersW2Form() {
   folderStructure.saveFileInFolder(newForm.getFormId());
   folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
 
-  // setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
+  setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
 
   // const engineers = readDataFromSpreadsheet(
   //   SpreadsheetApp.getActive(),
