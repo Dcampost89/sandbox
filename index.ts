@@ -11,15 +11,15 @@ function createEngineersW2Form() {
     Logger.log("The root folder was not found");
     return;
   }
-  // const newForm = new Form(
-  //   TITLES.FORMS.ENGINEER_FORM_WEEK_2,
-  //   SHEETS.QUESTIONS.ENGINEER_WEEK_2,
-  //   FORM_TYPES.ENGINEER,
-  //   folderStructure.getRootFolder()
-  // );
+  const newForm = new Form(
+    TITLES.FORMS.ENGINEER_FORM_WEEK_2,
+    SHEETS.QUESTIONS.ENGINEER_WEEK_2,
+    FORM_TYPES.ENGINEER,
+    folderStructure.getRootFolder()
+  );
 
-  // folderStructure.saveFileInFolder(newForm.getFormId());
-  // folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
+  folderStructure.saveFileInFolder(newForm.getFormId());
+  folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
 
   // setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
 
