@@ -13,7 +13,7 @@ export class FolderStructure {
   }
 
   private setRootFolder() {
-    const data: [] = readDataFromSpreadsheet(
+    const data: string[] = readDataFromSpreadsheet(
       this.generalDataFile,
       SHEETS.GENERAL
     );

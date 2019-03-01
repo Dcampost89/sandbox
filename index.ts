@@ -5,6 +5,38 @@ import { Email } from "./Email";
 import { FORM_TYPES, SHEETS, TITLES } from "./constants";
 import { setFormSubmitTrigger, readDataFromSpreadsheet } from "./utils";
 
+function createEngineersW1Form() {
+  const folderStructure = new FolderStructure();
+  if (!folderStructure.getRootFolder()) {
+    Logger.log("The root folder was not found");
+    return;
+  }
+  const newForm = new Form(
+    TITLES.FORMS.ENGINEER_FORM_WEEK_1,
+    SHEETS.QUESTIONS.ENGINEER_WEEK_1,
+    FORM_TYPES.ENGINEER,
+    folderStructure.getRootFolder()
+  );
+
+  folderStructure.saveFileInFolder(newForm.getFormId());
+  folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
+
+  setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
+
+  const engineers = readDataFromSpreadsheet(
+    SpreadsheetApp.getActive(),
+    SHEETS.ENGINEERS
+  );
+  const recipients = engineers.map(row => row[1]).join(",");
+  const email = new Email(
+    recipients,
+    "Project Health Check for Wizeline Teams",
+    "engineers_email.html",
+    newForm.getFormUrl()
+  );
+  email.sendEmail();
+}
+
 function createEngineersW2Form() {
   const folderStructure = new FolderStructure();
   if (!folderStructure.getRootFolder()) {
