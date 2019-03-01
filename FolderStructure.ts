@@ -58,18 +58,18 @@ export class FolderStructure {
 
   private getCurrentWeekFolderName() {
     const today = new Date();
-    const currentDay: number = today.getDate();
-    const currentWeekDay: number = today.getDay();
-    let currentWeekFolderName = "";
+    const day = today.getDay();
+    const date = today.getDate() - day;
 
-    if (currentWeekDay === 1) {
-      currentWeekFolderName = `${currentDay}-${currentDay + 4}`;
-    } else {
-      const weekDiff = currentDay - 5;
-      const end = currentDay + weekDiff;
-      const start = end - 4;
-      currentWeekFolderName = `${start}-${end}`;
-    }
+    const startDate = new Date(today.setDate(date)).getDate() + 1;
+    const endDate = new Date(today.setDate(date + 5)).getDate();
+
+    const currentWeekFolderName = `${startDate}-${endDate}`;
+
+    Logger.log(
+      "[getCurrentWeekFolderName] dayOfTheWeek %s",
+      currentWeekFolderName
+    );
 
     return currentWeekFolderName;
   }
