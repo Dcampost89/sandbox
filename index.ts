@@ -11,15 +11,15 @@ function createEngineersW2Form() {
     Logger.log("The root folder was not found");
     return;
   }
-  // const newForm = new Form(
-  //   TITLES.FORMS.ENGINEER_FORM_WEEK_2,
-  //   SHEETS.QUESTIONS.ENGINEER_WEEK_2,
-  //   FORM_TYPES.ENGINEER,
-  //   folderStructure.getRootFolder()
-  // );
+  const newForm = new Form(
+    TITLES.FORMS.ENGINEER_FORM_WEEK_2,
+    SHEETS.QUESTIONS.ENGINEER_WEEK_2,
+    FORM_TYPES.ENGINEER,
+    folderStructure.getRootFolder()
+  );
 
-  // folderStructure.saveFileInFolder(newForm.getFormId());
-  // folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
+  folderStructure.saveFileInFolder(newForm.getFormId());
+  folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
 
   // setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
 
@@ -53,24 +53,24 @@ function createProjectManagerW2Form() {
   folderStructure.saveFileInFolder(newForm.getFormId());
   folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
 
-  setFormSubmitTrigger(
-    "projectManagersFormResponsesHandler",
-    newForm.getFormId()
-  );
+  // setFormSubmitTrigger(
+  //   "projectManagersFormResponsesHandler",
+  //   newForm.getFormId()
+  // );
 
-  const projectManagers = readDataFromSpreadsheet(
-    SpreadsheetApp.getActive(),
-    SHEETS.PROJECT_MANEGERS
-  );
-  const recipients = projectManagers.map(row => row[1]).join(",");
+  // const projectManagers = readDataFromSpreadsheet(
+  //   SpreadsheetApp.getActive(),
+  //   SHEETS.PROJECT_MANEGERS
+  // );
+  // const recipients = projectManagers.map(row => row[1]).join(",");
 
-  const email = new Email(
-    recipients,
-    "Project Health Check for Wizeline Teams",
-    "pm_dm_email.html",
-    newForm.getFormUrl()
-  );
-  email.sendEmail();
+  // const email = new Email(
+  //   recipients,
+  //   "Project Health Check for Wizeline Teams",
+  //   "pm_dm_email.html",
+  //   newForm.getFormUrl()
+  // );
+  // email.sendEmail();
 }
 
 function createDeliveryManagerForm() {
