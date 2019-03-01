@@ -21,7 +21,7 @@ function createEngineersW2Form() {
   folderStructure.saveFileInFolder(newForm.getFormId());
   folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
 
-  // setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
+  setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
 
   // const engineers = readDataFromSpreadsheet(
   //   SpreadsheetApp.getActive(),
@@ -53,10 +53,10 @@ function createProjectManagerW2Form() {
   folderStructure.saveFileInFolder(newForm.getFormId());
   folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
 
-  // setFormSubmitTrigger(
-  //   "projectManagersFormResponsesHandler",
-  //   newForm.getFormId()
-  // );
+  setFormSubmitTrigger(
+    "projectManagersFormResponsesHandler",
+    newForm.getFormId()
+  );
 
   // const projectManagers = readDataFromSpreadsheet(
   //   SpreadsheetApp.getActive(),
