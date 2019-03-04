@@ -153,6 +153,7 @@ export class FormResponsesHandler {
           break;
         case FORM_TYPES.DELIVERY_MANAGER:
           row.push(SHEETS.DELIVERY_MANAGERS);
+          row.push(SHEETS.ENGINEERS);
           break;
         default:
           row.push(SHEETS.ENGINEERS);

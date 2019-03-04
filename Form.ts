@@ -8,7 +8,7 @@ import { FORM_TYPES, SHEETS, FILES, TITLES } from "./constants";
 
 export class Form {
   title: string;
-  questions: [string];
+  questions: string[];
   questionsSheetName: string;
   rootFolder: any;
   form: any;
@@ -32,8 +32,10 @@ export class Form {
       .next();
     this.formQuestionsFile = SpreadsheetApp.openById(formQuestions.getId());
     this.formResponsesFile = createSpreadsheet(`${this.title}-Responses`);
-    this.fetchFormQuestions();
-    this.createForm();
+    this.questions = this.fetchFormQuestions();
+    if (this.questions.length > 0) {
+      this.createForm();
+    }
   }
 
   private createForm() {
@@ -95,8 +97,12 @@ export class Form {
         .setTitle(this.questions[this.questions.length - 1])
         .setRequired(true);
     } else {
+      let tableFieldsStartingAt = 1;
+      if (this.formType == FORM_TYPES.DELIVERY_MANAGER) {
+        tableFieldsStartingAt = 2;
+      }
       this.questions.forEach((question, index) => {
-        if (index > 1) {
+        if (index > tableFieldsStartingAt) {
           this.addTableField(question, title);
         } else {
           this.addMultipleChoiceField(question);
@@ -144,8 +150,11 @@ export class Form {
       this.formQuestionsFile,
       this.questionsSheetName
     );
-
-    this.questions = questions.map(row => row[0]);
+    let resp = [];
+    if (questions.length > 0) {
+      resp = questions.map(row => row[0]);
+    }
+    return resp;
   }
 
   private fetchFormQuestionsAnswers() {

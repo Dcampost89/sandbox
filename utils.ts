@@ -4,11 +4,12 @@ const createSpreadsheet = name => {
 };
 
 const readDataFromSpreadsheet = (spreadSheet, sheet) => {
-  let data = spreadSheet
-    .getSheetByName(sheet)
-    .getDataRange()
-    .getValues();
-  data.shift();
+  const desiredSheet = spreadSheet.getSheetByName(sheet);
+  let data = [];
+  if (desiredSheet) {
+    data = desiredSheet.getDataRange().getValues();
+    data.shift();
+  }
   return data;
 };
 
