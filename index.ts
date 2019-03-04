@@ -69,6 +69,44 @@ function createEngineersW2Form() {
   email.sendEmail();
 }
 
+function createProjectManagerW1Form() {
+  const folderStructure = new FolderStructure();
+  if (!folderStructure.getRootFolder()) {
+    Logger.log("The root folder was not found");
+    return;
+  }
+  const newForm = new Form(
+    TITLES.FORMS.PROJECT_MANAGER_WEEK_1,
+    SHEETS.QUESTIONS.PROJECT_MANAGER_WEEK_1,
+    FORM_TYPES.PROJECT_MANAGER,
+    folderStructure.getRootFolder()
+  );
+
+  folderStructure.saveFileInFolder(newForm.getFormId());
+  folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
+
+  setFormSubmitTrigger(
+    "projectManagersFormResponsesHandler",
+    newForm.getFormId()
+  );
+
+  // const projectManagers = readDataFromSpreadsheet(
+  //   SpreadsheetApp.getActive(),
+  //   SHEETS.PROJECT_MANEGERS
+  // );
+  // const recipients = projectManagers.map(row => row[1]).join(",");
+  const recipients =
+    "daniel.campos@team.wizeline.com,sofia.gudino@team.wizeline.com";
+
+  const email = new Email(
+    recipients,
+    "Project Health Check for Wizeline Teams",
+    "pm_dm_email.html",
+    newForm.getFormUrl()
+  );
+  email.sendEmail();
+}
+
 function createProjectManagerW2Form() {
   const folderStructure = new FolderStructure();
   if (!folderStructure.getRootFolder()) {
