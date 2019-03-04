@@ -90,13 +90,11 @@ function createProjectManagerW1Form() {
     newForm.getFormId()
   );
 
-  // const projectManagers = readDataFromSpreadsheet(
-  //   SpreadsheetApp.getActive(),
-  //   SHEETS.PROJECT_MANEGERS
-  // );
-  // const recipients = projectManagers.map(row => row[1]).join(",");
-  const recipients =
-    "daniel.campos@team.wizeline.com,sofia.gudino@team.wizeline.com";
+  const projectManagers = readDataFromSpreadsheet(
+    SpreadsheetApp.getActive(),
+    SHEETS.PROJECT_MANEGERS
+  );
+  const recipients = projectManagers.map(row => row[1]).join(",");
 
   const email = new Email(
     recipients,
