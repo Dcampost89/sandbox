@@ -28,9 +28,10 @@ const setFormSubmitTrigger = (handlerFunction: string, formId: string) => {
 };
 
 const findFileAndRemove = fileName => {
-  const file = DriveApp.getFilesByName(fileName);
-  if (file.hasNext()) {
-    DriveApp.removeFile(fileName);
+  const fileIterator = DriveApp.getFilesByName(fileName);
+  if (fileIterator.hasNext()) {
+    const fileToRemove = fileIterator.next();
+    DriveApp.removeFile(fileToRemove);
   }
 };
 

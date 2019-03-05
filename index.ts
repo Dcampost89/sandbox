@@ -11,45 +11,51 @@ import {
 } from "./utils";
 
 function createEngineersW1Form() {
-  const folderStructure = new FolderStructure();
-  if (!folderStructure.getRootFolder()) {
-    Logger.log("The root folder was not found");
-    return;
+  try {
+    const folderStructure = new FolderStructure();
+    if (!folderStructure.getRootFolder()) {
+      Logger.log("The root folder was not found");
+      return;
+    }
+    const newForm = new Form(
+      TITLES.FORMS.ENGINEER_FORM_WEEK_1,
+      SHEETS.QUESTIONS.ENGINEER_WEEK_1,
+      FORM_TYPES.ENGINEER,
+      folderStructure.getRootFolder()
+    );
+
+    folderStructure.saveFileInFolder(newForm.getFormId());
+    folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
+
+    setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
+
+    // const engineers = readDataFromSpreadsheet(
+    //   SpreadsheetApp.getActive(),
+    //   SHEETS.ENGINEERS
+    // );
+    // const recipients = engineers.map(row => row[1]).join(",");
+    const recipients =
+      "daniel.campos@team.wizeline.com,sofia.gudino@team.wizeline.com";
+    const email = new Email(
+      recipients,
+      "Project Health Check for Wizeline Teams",
+      "engineers_email.html",
+      newForm.getFormUrl()
+    );
+    email.sendEmail();
+  } catch (error) {
+    formCreationErrorHandler(error, TITLES.FORMS.ENGINEER_FORM_WEEK_1);
   }
-  const newForm = new Form(
-    TITLES.FORMS.ENGINEER_FORM_WEEK_1,
-    SHEETS.QUESTIONS.ENGINEER_WEEK_1,
-    FORM_TYPES.ENGINEER,
-    folderStructure.getRootFolder()
-  );
-
-  folderStructure.saveFileInFolder(newForm.getFormId());
-  folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
-
-  setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
-
-  const engineers = readDataFromSpreadsheet(
-    SpreadsheetApp.getActive(),
-    SHEETS.ENGINEERS
-  );
-  const recipients = engineers.map(row => row[1]).join(",");
-  const email = new Email(
-    recipients,
-    "Project Health Check for Wizeline Teams",
-    "engineers_email.html",
-    newForm.getFormUrl()
-  );
-  email.sendEmail();
 }
 
 function createEngineersW2Form() {
-  const folderStructure = new FolderStructure();
-  if (!folderStructure.getRootFolder()) {
-    Logger.log("The root folder was not found");
-    return;
-  }
-
   try {
+    const folderStructure = new FolderStructure();
+    if (!folderStructure.getRootFolder()) {
+      Logger.log("The root folder was not found");
+      return;
+    }
+
     const newForm = new Form(
       TITLES.FORMS.ENGINEER_FORM_WEEK_2,
       SHEETS.QUESTIONS.ENGINEER_WEEK_2,
@@ -62,11 +68,13 @@ function createEngineersW2Form() {
 
     setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
 
-    const engineers = readDataFromSpreadsheet(
-      SpreadsheetApp.getActive(),
-      SHEETS.ENGINEERS
-    );
-    const recipients = engineers.map(row => row[1]).join(",");
+    // const engineers = readDataFromSpreadsheet(
+    //   SpreadsheetApp.getActive(),
+    //   SHEETS.ENGINEERS
+    // );
+    // const recipients = engineers.map(row => row[1]).join(",");
+    const recipients =
+      "daniel.campos@team.wizeline.com,sofia.gudino@team.wizeline.com";
     const email = new Email(
       recipients,
       "Project Health Check for Wizeline Teams",
@@ -75,19 +83,18 @@ function createEngineersW2Form() {
     );
     email.sendEmail();
   } catch (error) {
-    displayAlert(error);
-    findFileAndRemove(TITLES.FORMS.ENGINEER_FORM_WEEK_2);
+    formCreationErrorHandler(error, TITLES.FORMS.ENGINEER_FORM_WEEK_2);
   }
 }
 
 function createProjectManagerW1Form() {
-  const folderStructure = new FolderStructure();
-  if (!folderStructure.getRootFolder()) {
-    Logger.log("The root folder was not found");
-    return;
-  }
-
   try {
+    const folderStructure = new FolderStructure();
+    if (!folderStructure.getRootFolder()) {
+      Logger.log("The root folder was not found");
+      return;
+    }
+
     const newForm = new Form(
       TITLES.FORMS.PROJECT_MANAGER_WEEK_1,
       SHEETS.QUESTIONS.PROJECT_MANAGER_WEEK_1,
@@ -103,10 +110,10 @@ function createProjectManagerW1Form() {
       newForm.getFormId()
     );
 
-    const projectManagers = readDataFromSpreadsheet(
-      SpreadsheetApp.getActive(),
-      SHEETS.PROJECT_MANEGERS
-    );
+    // const projectManagers = readDataFromSpreadsheet(
+    //   SpreadsheetApp.getActive(),
+    //   SHEETS.PROJECT_MANEGERS
+    // );
     //const recipients = projectManagers.map(row => row[1]).join(",");
     const recipients =
       "daniel.campos@team.wizeline.com,sofia.gudino@team.wizeline.com";
@@ -118,82 +125,94 @@ function createProjectManagerW1Form() {
     );
     email.sendEmail();
   } catch (error) {
-    displayAlert(error);
-    findFileAndRemove(TITLES.FORMS.ENGINEER_FORM_WEEK_2);
+    formCreationErrorHandler(error, TITLES.FORMS.PROJECT_MANAGER_WEEK_1);
   }
 }
 
 function createProjectManagerW2Form() {
-  const folderStructure = new FolderStructure();
-  if (!folderStructure.getRootFolder()) {
-    Logger.log("The root folder was not found");
-    return;
+  try {
+    const folderStructure = new FolderStructure();
+    if (!folderStructure.getRootFolder()) {
+      Logger.log("The root folder was not found");
+      return;
+    }
+    const newForm = new Form(
+      TITLES.FORMS.PROJECT_MANAGER_WEEK_2,
+      SHEETS.QUESTIONS.PROJECT_MANAGER_WEEK_2,
+      FORM_TYPES.PROJECT_MANAGER,
+      folderStructure.getRootFolder()
+    );
+
+    folderStructure.saveFileInFolder(newForm.getFormId());
+    folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
+
+    setFormSubmitTrigger(
+      "projectManagersFormResponsesHandler",
+      newForm.getFormId()
+    );
+
+    // const projectManagers = readDataFromSpreadsheet(
+    //   SpreadsheetApp.getActive(),
+    //   SHEETS.PROJECT_MANEGERS
+    // );
+    // const recipients = projectManagers.map(row => row[1]).join(",");
+    const recipients =
+      "daniel.campos@team.wizeline.com,sofia.gudino@team.wizeline.com";
+
+    const email = new Email(
+      recipients,
+      "Project Health Check for Wizeline Teams",
+      "pm_dm_email.html",
+      newForm.getFormUrl()
+    );
+    email.sendEmail();
+  } catch (error) {
+    formCreationErrorHandler(error, TITLES.FORMS.PROJECT_MANAGER_WEEK_2);
   }
-  const newForm = new Form(
-    TITLES.FORMS.PROJECT_MANAGER_WEEK_2,
-    SHEETS.QUESTIONS.PROJECT_MANAGER_WEEK_2,
-    FORM_TYPES.PROJECT_MANAGER,
-    folderStructure.getRootFolder()
-  );
-
-  folderStructure.saveFileInFolder(newForm.getFormId());
-  folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
-
-  setFormSubmitTrigger(
-    "projectManagersFormResponsesHandler",
-    newForm.getFormId()
-  );
-
-  const projectManagers = readDataFromSpreadsheet(
-    SpreadsheetApp.getActive(),
-    SHEETS.PROJECT_MANEGERS
-  );
-  const recipients = projectManagers.map(row => row[1]).join(",");
-
-  const email = new Email(
-    recipients,
-    "Project Health Check for Wizeline Teams",
-    "pm_dm_email.html",
-    newForm.getFormUrl()
-  );
-  email.sendEmail();
 }
 
 function createDeliveryManagerForm() {
-  const folderStructure = new FolderStructure();
-  if (!folderStructure.getRootFolder()) {
-    Logger.log("The root folder was not found");
-    return;
+  try {
+    const folderStructure = new FolderStructure();
+    if (!folderStructure.getRootFolder()) {
+      Logger.log("The root folder was not found");
+      return;
+    }
+
+    const newForm = new Form(
+      TITLES.FORMS.DELIVERY_MANAGER,
+      SHEETS.QUESTIONS.DELIVERY_MANAGER,
+      FORM_TYPES.DELIVERY_MANAGER,
+      folderStructure.getRootFolder()
+    );
+
+    folderStructure.saveFileInFolder(newForm.getFormId());
+    folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
+
+    setFormSubmitTrigger(
+      "deliveryManagersFormResponsesHandler",
+      newForm.getFormId()
+    );
+
+    // const deliveryManagers = readDataFromSpreadsheet(
+    //   SpreadsheetApp.getActive(),
+    //   SHEETS.DELIVERY_MANAGERS
+    // );
+    // const recipients = deliveryManagers.map(row => row[1]).join(",");
+
+    const recipients =
+      "daniel.campos@team.wizeline.com,sofia.gudino@team.wizeline.com";
+
+    const email = new Email(
+      recipients,
+      "Project Health Check for Wizeline Teams",
+      "pm_dm_email.html",
+      newForm.getFormUrl()
+    );
+    email.sendEmail();
+  } catch (error) {
+    formCreationErrorHandler(error, TITLES.FORMS.DELIVERY_MANAGER);
   }
-
-  const newForm = new Form(
-    TITLES.FORMS.DELIVERY_MANAGER,
-    SHEETS.QUESTIONS.DELIVERY_MANAGER,
-    FORM_TYPES.DELIVERY_MANAGER,
-    folderStructure.getRootFolder()
-  );
-
-  folderStructure.saveFileInFolder(newForm.getFormId());
-  folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
-
-  setFormSubmitTrigger(
-    "deliveryManagersFormResponsesHandler",
-    newForm.getFormId()
-  );
-
-  const deliveryManagers = readDataFromSpreadsheet(
-    SpreadsheetApp.getActive(),
-    SHEETS.DELIVERY_MANAGERS
-  );
-  const recipients = deliveryManagers.map(row => row[1]).join(",");
-
-  const email = new Email(
-    recipients,
-    "Project Health Check for Wizeline Teams",
-    "pm_dm_email.html",
-    newForm.getFormUrl()
-  );
-  email.sendEmail();
 }
 
 function engineersFormResponsesHandler(e) {
@@ -221,4 +240,9 @@ function deliveryManagersFormResponsesHandler(e) {
     FORM_TYPES.DELIVERY_MANAGER
   );
   responsesHandler.onFormSubmitHandler(e);
+}
+
+function formCreationErrorHandler(erroMsg, formNameToDelete) {
+  displayAlert(erroMsg);
+  findFileAndRemove(formNameToDelete);
 }

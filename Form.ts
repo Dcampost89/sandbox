@@ -110,7 +110,7 @@ export class Form {
       }
       this.questions.forEach((question, index) => {
         if (index > tableFieldsStartingAt) {
-          this.addTableField(question, title);
+          this.addTableField(question, engineers);
         } else {
           this.addMultipleChoiceField(question);
         }
