@@ -1,7 +1,8 @@
 /*import {
   readDataFromSpreadsheet,
   readSpreadsheetDataFromKey,
-  createSpreadsheet
+  createSpreadsheet,
+  displayAlert
 } from "./utils";*/
 
 import { FORM_TYPES, SHEETS, FILES, TITLES } from "./constants";
@@ -35,6 +36,8 @@ export class Form {
     this.questions = this.fetchFormQuestions();
     if (this.questions.length > 0) {
       this.createForm();
+    } else {
+      throw new Error("The questions for this form were not found!");
     }
   }
 
@@ -101,6 +104,10 @@ export class Form {
       if (this.formType == FORM_TYPES.DELIVERY_MANAGER) {
         tableFieldsStartingAt = 2;
       }
+      const engineers = this.fetchEngineersByProject(title);
+      if (engineers.length === 0) {
+        throw new Error(`Project ${title} has no engineers asigned`);
+      }
       this.questions.forEach((question, index) => {
         if (index > tableFieldsStartingAt) {
           this.addTableField(question, title);
@@ -142,7 +149,7 @@ export class Form {
       this.formDataFile,
       SHEETS.ENGINEERS
     );
-    return engineersList.filter(row => row[2] === project);
+    return engineersList.filter(row => row[2] === project).map(row => row[0]);
   }
 
   private fetchFormQuestions() {
@@ -159,7 +166,7 @@ export class Form {
 
   private fetchFormQuestionsAnswers() {
     const answers = readDataFromSpreadsheet(this.formDataFile, SHEETS.ANSWERS);
-    return answers;
+    return answers.map(row => row[0]);
   }
 
   private addMultipleChoiceField(title) {
@@ -167,21 +174,18 @@ export class Form {
     const answers = this.fetchFormQuestionsAnswers();
     const choices = [];
     answers.forEach(row => {
-      choices.push(question.createChoice(row[0]));
+      choices.push(question.createChoice(row));
     });
     question.setChoices(choices).setRequired(true);
     return question;
   }
 
-  private addTableField(title, project) {
+  private addTableField(title, options) {
     const question = this.form.addGridItem().setTitle(title);
-    const engineers = this.fetchEngineersByProject(project);
     const answers = this.fetchFormQuestionsAnswers();
-    const rows = engineers.map(row => row[0]);
-    const colums = answers.map(row => row[0]);
     question
-      .setRows(rows)
-      .setColumns(colums)
+      .setRows(options)
+      .setColumns(answers)
       .setRequired(true);
     return question;
   }

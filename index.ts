@@ -3,7 +3,12 @@ import { FormResponsesHandler } from "./FormResponsesHandler";
 import { FolderStructure } from "./FolderStructure";
 import { Email } from "./Email";
 import { FORM_TYPES, SHEETS, TITLES } from "./constants";
-import { setFormSubmitTrigger, readDataFromSpreadsheet } from "./utils";
+import {
+  setFormSubmitTrigger,
+  readDataFromSpreadsheet,
+  displayAlert,
+  findFileAndRemove
+} from "./utils";
 
 function createEngineersW1Form() {
   const folderStructure = new FolderStructure();
@@ -43,30 +48,36 @@ function createEngineersW2Form() {
     Logger.log("The root folder was not found");
     return;
   }
-  const newForm = new Form(
-    TITLES.FORMS.ENGINEER_FORM_WEEK_2,
-    SHEETS.QUESTIONS.ENGINEER_WEEK_2,
-    FORM_TYPES.ENGINEER,
-    folderStructure.getRootFolder()
-  );
 
-  folderStructure.saveFileInFolder(newForm.getFormId());
-  folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
+  try {
+    const newForm = new Form(
+      TITLES.FORMS.ENGINEER_FORM_WEEK_2,
+      SHEETS.QUESTIONS.ENGINEER_WEEK_2,
+      FORM_TYPES.ENGINEER,
+      folderStructure.getRootFolder()
+    );
 
-  setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
+    folderStructure.saveFileInFolder(newForm.getFormId());
+    folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
 
-  const engineers = readDataFromSpreadsheet(
-    SpreadsheetApp.getActive(),
-    SHEETS.ENGINEERS
-  );
-  const recipients = engineers.map(row => row[1]).join(",");
-  const email = new Email(
-    recipients,
-    "Project Health Check for Wizeline Teams",
-    "engineers_email.html",
-    newForm.getFormUrl()
-  );
-  email.sendEmail();
+    setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
+
+    const engineers = readDataFromSpreadsheet(
+      SpreadsheetApp.getActive(),
+      SHEETS.ENGINEERS
+    );
+    const recipients = engineers.map(row => row[1]).join(",");
+    const email = new Email(
+      recipients,
+      "Project Health Check for Wizeline Teams",
+      "engineers_email.html",
+      newForm.getFormUrl()
+    );
+    email.sendEmail();
+  } catch (error) {
+    displayAlert(error);
+    findFileAndRemove(TITLES.FORMS.ENGINEER_FORM_WEEK_2);
+  }
 }
 
 function createProjectManagerW1Form() {
@@ -75,34 +86,41 @@ function createProjectManagerW1Form() {
     Logger.log("The root folder was not found");
     return;
   }
-  const newForm = new Form(
-    TITLES.FORMS.PROJECT_MANAGER_WEEK_1,
-    SHEETS.QUESTIONS.PROJECT_MANAGER_WEEK_1,
-    FORM_TYPES.PROJECT_MANAGER,
-    folderStructure.getRootFolder()
-  );
 
-  folderStructure.saveFileInFolder(newForm.getFormId());
-  folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
+  try {
+    const newForm = new Form(
+      TITLES.FORMS.PROJECT_MANAGER_WEEK_1,
+      SHEETS.QUESTIONS.PROJECT_MANAGER_WEEK_1,
+      FORM_TYPES.PROJECT_MANAGER,
+      folderStructure.getRootFolder()
+    );
 
-  setFormSubmitTrigger(
-    "projectManagersFormResponsesHandler",
-    newForm.getFormId()
-  );
+    folderStructure.saveFileInFolder(newForm.getFormId());
+    folderStructure.saveFileInFolder(newForm.getFormResponsesFile());
 
-  const projectManagers = readDataFromSpreadsheet(
-    SpreadsheetApp.getActive(),
-    SHEETS.PROJECT_MANEGERS
-  );
-  const recipients = projectManagers.map(row => row[1]).join(",");
+    setFormSubmitTrigger(
+      "projectManagersFormResponsesHandler",
+      newForm.getFormId()
+    );
 
-  const email = new Email(
-    recipients,
-    "Project Health Check for Wizeline Teams",
-    "pm_dm_email.html",
-    newForm.getFormUrl()
-  );
-  email.sendEmail();
+    const projectManagers = readDataFromSpreadsheet(
+      SpreadsheetApp.getActive(),
+      SHEETS.PROJECT_MANEGERS
+    );
+    //const recipients = projectManagers.map(row => row[1]).join(",");
+    const recipients =
+      "daniel.campos@team.wizeline.com,sofia.gudino@team.wizeline.com";
+    const email = new Email(
+      recipients,
+      "Project Health Check for Wizeline Teams",
+      "pm_dm_email.html",
+      newForm.getFormUrl()
+    );
+    email.sendEmail();
+  } catch (error) {
+    displayAlert(error);
+    findFileAndRemove(TITLES.FORMS.ENGINEER_FORM_WEEK_2);
+  }
 }
 
 function createProjectManagerW2Form() {

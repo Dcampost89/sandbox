@@ -27,9 +27,22 @@ const setFormSubmitTrigger = (handlerFunction: string, formId: string) => {
     .create();
 };
 
+const findFileAndRemove = fileName => {
+  const file = DriveApp.getFilesByName(fileName);
+  if (file.hasNext()) {
+    DriveApp.removeFile(fileName);
+  }
+};
+
+const displayAlert = msg => {
+  SpreadsheetApp.getUi().alert(msg);
+};
+
 export {
   createSpreadsheet,
   readDataFromSpreadsheet,
   readSpreadsheetDataFromKey,
-  setFormSubmitTrigger
+  setFormSubmitTrigger,
+  displayAlert,
+  findFileAndRemove
 };
