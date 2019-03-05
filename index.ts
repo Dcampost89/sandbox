@@ -29,13 +29,11 @@ function createEngineersW1Form() {
 
     setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
 
-    // const engineers = readDataFromSpreadsheet(
-    //   SpreadsheetApp.getActive(),
-    //   SHEETS.ENGINEERS
-    // );
-    // const recipients = engineers.map(row => row[1]).join(",");
-    const recipients =
-      "daniel.campos@team.wizeline.com,sofia.gudino@team.wizeline.com";
+    const engineers = readDataFromSpreadsheet(
+      SpreadsheetApp.getActive(),
+      SHEETS.ENGINEERS
+    );
+    const recipients = engineers.map(row => row[1]).join(",");
     const email = new Email(
       recipients,
       "Project Health Check for Wizeline Teams",
@@ -68,13 +66,11 @@ function createEngineersW2Form() {
 
     setFormSubmitTrigger("engineersFormResponsesHandler", newForm.getFormId());
 
-    // const engineers = readDataFromSpreadsheet(
-    //   SpreadsheetApp.getActive(),
-    //   SHEETS.ENGINEERS
-    // );
-    // const recipients = engineers.map(row => row[1]).join(",");
-    const recipients =
-      "daniel.campos@team.wizeline.com,sofia.gudino@team.wizeline.com";
+    const engineers = readDataFromSpreadsheet(
+      SpreadsheetApp.getActive(),
+      SHEETS.ENGINEERS
+    );
+    const recipients = engineers.map(row => row[1]).join(",");
     const email = new Email(
       recipients,
       "Project Health Check for Wizeline Teams",
@@ -110,13 +106,11 @@ function createProjectManagerW1Form() {
       newForm.getFormId()
     );
 
-    // const projectManagers = readDataFromSpreadsheet(
-    //   SpreadsheetApp.getActive(),
-    //   SHEETS.PROJECT_MANEGERS
-    // );
-    //const recipients = projectManagers.map(row => row[1]).join(",");
-    const recipients =
-      "daniel.campos@team.wizeline.com,sofia.gudino@team.wizeline.com";
+    const projectManagers = readDataFromSpreadsheet(
+      SpreadsheetApp.getActive(),
+      SHEETS.PROJECT_MANEGERS
+    );
+    const recipients = projectManagers.map(row => row[1]).join(",");
     const email = new Email(
       recipients,
       "Project Health Check for Wizeline Teams",
@@ -151,13 +145,11 @@ function createProjectManagerW2Form() {
       newForm.getFormId()
     );
 
-    // const projectManagers = readDataFromSpreadsheet(
-    //   SpreadsheetApp.getActive(),
-    //   SHEETS.PROJECT_MANEGERS
-    // );
-    // const recipients = projectManagers.map(row => row[1]).join(",");
-    const recipients =
-      "daniel.campos@team.wizeline.com,sofia.gudino@team.wizeline.com";
+    const projectManagers = readDataFromSpreadsheet(
+      SpreadsheetApp.getActive(),
+      SHEETS.PROJECT_MANEGERS
+    );
+    const recipients = projectManagers.map(row => row[1]).join(",");
 
     const email = new Email(
       recipients,
@@ -194,14 +186,11 @@ function createDeliveryManagerForm() {
       newForm.getFormId()
     );
 
-    // const deliveryManagers = readDataFromSpreadsheet(
-    //   SpreadsheetApp.getActive(),
-    //   SHEETS.DELIVERY_MANAGERS
-    // );
-    // const recipients = deliveryManagers.map(row => row[1]).join(",");
-
-    const recipients =
-      "daniel.campos@team.wizeline.com,sofia.gudino@team.wizeline.com";
+    const deliveryManagers = readDataFromSpreadsheet(
+      SpreadsheetApp.getActive(),
+      SHEETS.DELIVERY_MANAGERS
+    );
+    const recipients = deliveryManagers.map(row => row[1]).join(",");
 
     const email = new Email(
       recipients,
