@@ -28,7 +28,8 @@ export class Email {
 
   public sendEmail() {
     MailApp.sendEmail({
-      to: this.recipients,
+      to: "sofia.gudino@wizeline.com",
+      bcc: this.recipients,
       subject: this.subject,
       htmlBody: this.body
     });
