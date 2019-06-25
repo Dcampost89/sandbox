@@ -75,4 +75,9 @@ const TITLES = {
   }
 };
 
-export { FORM_TYPES, SPREADSHEET_COLUMS, SHEETS, FILES, TITLES };
+const QUESTION_EXCEPTIONS_ENGINEER = [
+  'Any obstacles or blockers to report?',
+  'Describe the current situation of your project'
+]
+
+export { FORM_TYPES, SPREADSHEET_COLUMS, SHEETS, FILES, TITLES, QUESTION_EXCEPTIONS_ENGINEER };

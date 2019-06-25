@@ -5,7 +5,7 @@
   displayAlert
 } from "./utils";*/
 
-import { FORM_TYPES, SHEETS, FILES, TITLES } from "./constants";
+import { FORM_TYPES, SHEETS, FILES, TITLES, QUESTION_EXCEPTIONS_ENGINEER } from "./constants";
 
 export class Form {
   title: string;
@@ -91,14 +91,20 @@ export class Form {
       .setTitle(title)
       .setGoToPage(FormApp.PageNavigationType.SUBMIT);
     if (this.formType == FORM_TYPES.ENGINEER) {
-      for (let i = 0; i < this.questions.length - 1; i++) {
-        this.addMultipleChoiceField(this.questions[i]);
-        this.addTextField(TITLES.TEXT_FIELD);
+      for (let i = 0; i < this.questions.length; i++) {
+        const currentQuestion = this.questions[i].trim();
+        const isTextQuestion = QUESTION_EXCEPTIONS_ENGINEER.indexOf(currentQuestion) >= 0;
+
+        if (isTextQuestion) {
+          this.form
+            .addTextItem()
+            .setTitle(currentQuestion)
+            .setRequired(true);
+        } else {
+          this.addMultipleChoiceField(currentQuestion);
+          this.addTextField(TITLES.TEXT_FIELD);
+        }
       }
-      this.form
-        .addTextItem()
-        .setTitle(this.questions[this.questions.length - 1])
-        .setRequired(true);
     } else {
       let tableFieldsStartingAt = 1;
       if (this.formType == FORM_TYPES.DELIVERY_MANAGER) {
